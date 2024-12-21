@@ -1,0 +1,144 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/neenge</item>
+    </style>
+
+                <!-- STYLE EDITABLE DES ELEMENTS DE LA NOTICE : -->
+
+                        <!--  THESAURUS -->
+    <style name="notice_Thesaurus" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#990000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <integer name="marginLeft_notice_Thesaurus">10</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_Thesaurus">0</integer>
+    <integer name="marginTop_notice_Thesaurus">0</integer>
+    <integer name="marginBottom_notice_Thesaurus">0</integer>
+
+
+                             <!--  AUDIO -->
+    <style name="notice_AudioBtn">
+    </style>
+    <integer name="marginLeft_notice_AudioBtn">50</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_AudioBtn">0</integer>
+    <integer name="marginTop_notice_AudioBtn">0</integer>
+    <integer name="marginBottom_notice_AudioBtn">0</integer>
+
+                            <!--  IMAGES -->
+    <style name="notice_Illustration">
+    </style>
+    <integer name="marginLeft_notice_Illustration">50</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_Illustration">0</integer>
+    <integer name="marginTop_notice_Illustration">0</integer>
+    <integer name="marginBottom_notice_Illustration">0</integer>
+
+
+                             <!--  SENS LINK (cf)-->
+    <style name="notice_SenseLink" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#5c5c8a</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <integer name="marginLeft_notice_SenseLink">10</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_SenseLink">0</integer>
+    <integer name="marginTop_notice_SenseLink">0</integer>
+    <integer name="marginBottom_notice_SenseLink">0</integer>
+
+
+                        <!--  SENS (+ses examples) -->
+    <style name="notice_TextView" parent="@android:style/TextAppearance"> <!-- sens + exemples -->
+        <item name="android:textColor">#313331</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <integer name="marginLeft_notice_TextView">50</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_TextView">10</integer>
+    <integer name="marginTop_notice_TextView">0</integer>
+    <integer name="marginBottom_notice_TextView">0</integer>
+
+
+                        <!-- taille du texte des définitions : -->
+    <integer name="Definition_TextSize">26</integer>
+    <string name="Definition_Color" translatable="false">#313331</string>
+
+
+                                 <!--  GRAMMAIRE -->
+    <style name="notice_Grammar" parent="@android:style/TextAppearance"> <!-- grammaire -->
+        <item name="android:textColor">#6600ff</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
+                                 <!--  PS sous l'entrée principale -->
+    <integer name="marginLeft_notice_Header">30</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_Header">0</integer>
+    <integer name="marginTop_notice_Header">0</integer>
+    <integer name="marginBottom_notice_Header">0</integer>
+
+
+                                  <!--  TEXTE EXAMPLES LANGUE LOCALE -->
+    <style name="notice_ExamplesLocal" parent="@android:style/TextAppearance"> <!-- exemples en langue locale : définir la couleur, le style et la police -->
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <integer name="text_size_examples">22</integer>
+
+
+                                 <!--  TEXTE STYLE EXAMPLES LANGUE AUTRE (FR et EN)-->
+    <style name="notice_ExamplesOther" parent="@android:style/TextAppearance"> <!-- exemples traduits en d'autres langues : définir la couleur, le style et la police -->
+        <item name="android:textStyle">italic</item>
+    </style>
+
+                         <!--  TEXTE COULEUR FR et EN-->
+    <string name="textColor_FR" translatable="false">#29577a</string>
+    <string name="textColor_EN" translatable="false">#a37135</string>
+
+
+                           <!--  FOND NOTICE -->
+    <style name="notice_Background">
+    </style>
+
+                            <!--  TITRE NOTICE-->
+    <integer name="marginLeft_notice_Title">10</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_Title">0</integer>
+    <integer name="marginTop_notice_Title">0</integer>
+    <integer name="marginBottom_notice_Title">0</integer>
+                            <!--couleur des lexèmes : -->
+    <string name="textColor_Title" translatable="false">#000000</string>
+    <string name="textStyle_Title" translatable="false">b</string><!-- b for BOLD, i for ITALIC-->
+    <integer name="textSize_Title">34</integer>
+
+                     <!-- taille du texte des titres d'entrées et sous-entrées : -->
+    <integer name="Entry_TextSize">32</integer>
+    <integer name="SubEntry_TextSize">32</integer>
+    <string name="SubEntry_Color" translatable="false">#000000</string>
+
+                            <!-- taille et margins des Usages -->
+    <integer name="Usage_TextSize">22</integer>
+    <integer name="marginLeft_notice_Usage">50</integer><!-- unités en pixel -->
+    <integer name="marginRight_notice_Usage">0</integer>
+    <integer name="marginTop_notice_Usage">0</integer>
+    <integer name="marginBottom_notice_Usage">0</integer>
+
+
+                            <!-- COULEUR DES ONGLETS DE CHOIX DE LANGUE -->
+    <string name="localDelayColor_Theme" translatable="false">#caf2df</string><!-- pour la langue locale dans les onglets (Tabs)-->
+    <string name="frenchDelayColor_Theme" translatable="false">#c9dded</string><!-- pour la langue locale dans les onglets (Tabs)-->
+    <string name="englishDelayColor_Theme" translatable="false">#ecdac4</string><!-- pour la langue locale dans les onglets (Tabs)-->
+
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+
+</resources>

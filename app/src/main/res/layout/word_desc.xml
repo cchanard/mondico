@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/descriptionLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="0dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/head_relative_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/home_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/home_18dp"
+            android:contentDescription="@string/home_button_description" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/previous_button"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/lexeme"
+                    android:src="@drawable/previous_button"
+                    android:layout_toStartOf="@+id/lexeme"
+                    />
+
+                <TextView
+                    android:id="@+id/lexeme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="lexeme"
+                    android:textSize="@dimen/abc_text_size_display_1_material"
+                    android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/next_button"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/lexeme"
+                android:layout_toEndOf="@+id/lexeme"
+                android:src="@drawable/next_button"
+                android:text="&#129168;" />
+        </RelativeLayout>
+
+        <!--Button
+            android:id="@+id/precedent_button"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="&lt;?" /-->
+
+        <ImageButton
+            android:id="@+id/precedent_button"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/previous_button"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        android:layout_below="@+id/head_relative_layout">
+        <RelativeLayout
+            android:id="@+id/word_relative_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/text_relative_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textViewW"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

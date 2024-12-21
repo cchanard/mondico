@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
+        android:name="com.infolangues.mondico.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/neenge"
+        android:label="@string/app_name"
+        tools:targetApi="34">
+        <activity
+            android:name="com.infolangues.mondico.SplashScreen"
+            android:theme="@style/LaunchTheme"
+            android:exported="true"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <!-- @todo modifier de bloc pour mettre de bonnes données,
+                      @todo eventuellement le deplacer dans un nouveau intent-filter
+                      @todo et laisser les 2 dernières lignes tranquilles -->
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.infolangues.mondico.MainActivity" android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name="com.infolangues.mondico.word_listActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name="com.infolangues.mondico.word_descriptionActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name="com.infolangues.mondico.SearchResultActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name="com.infolangues.mondico.EmbeddedRecorderActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name="com.infolangues.mondico.helpActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name="com.infolangues.mondico.infoActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <!--activity android:name="com.infolangues.mondico.dictInfoActivity" /-->
+        <activity android:name="com.infolangues.mondico.languagesSettingsActivity" android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+    </application>
+
+</manifest>

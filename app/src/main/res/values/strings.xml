@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">Nengee dictionary</string>
+    <string name="authors">Bonnet/Marchetti/Chanard</string>
+
+    <string name="dict_info_title">Dictionary Information</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="app_label">monDico</string>
+    <string name="search_hint">Search a word</string>
+
+    <!--<string name="advanced_search_string">English / नेपाली</string>-->
+    <string name="advanced_search_string">advanced search</string>
+    <string name="search_now_string">search now</string>
+    <string name="contains_string">contains</string>
+    <string name="launch_search_string">advanced search</string>
+    <string name="action_information">dictionary information</string>
+    <string name="action_application_information">Application information</string>
+    <string name="action_languages_settings">Languages settings</string>
+    <string name="message_application_information">This application was created for LLACAN and SeDyl (two research units of french CNRS) by Louise Bouteille (louisebouteille@gmail.com) and Maël Franceschetti (mael.francesc@gmail.com) on the base of the project japhug_dictionary initiated by Remy Bonnet (remy.bonnet@cnrs.fr) for the Labex EFL. It is continued by Christian Chanard (christian.chanard@cnrs.fr)</string>
+    <string name="message_dico_information">This dictionary has been created as part of the project \'Dictionnaires de Guyane\' of SeDyl</string>
+    <string name="action_mail">Sende wan email/Envoyer nous un email/Send us a mail / </string>
+    <string name="action_faq">faq</string>
+    <string name="action_helpNg">Yeepi</string>
+    <string name="action_helpFr">Aide</string>
+    <string name="action_helpEn">Help</string>
+    <string name="action_info">About the Nengee dictionary</string>
+
+    <!-- <string name="user_feedback_message">help us to improve this definition</string> -->
+    <string name="user_feedback_message">Help us to improve the dictionary</string>
+
+    <!--<string name="main_search_title">Search Khaling verbs :</string>-->
+    <!--<string name="main_search_title">Search Teanu words :</string>-->
+    <string name="main_search_title">Search Nengee words :</string>
+    <!--<string name="main_search_title">Search Nengee words :</string>-->
+    <!--<string name="main_search_title">Search Na words :</string>-->
+
+    <string name="other_languages_search_title">You can search in another language:</string>
+    <string name="comment_edit_text_default_string">your comment</string>
+    <string name="audio_recorder_title">You can add a sound file</string>
+
+    <!--<string name="audio_start">start</string>-->
+    <string name="audio_stop">stop</string>
+    <string name="audio_record">record</string>
+    <string name="audio_play">play</string>
+    <string name="send_mail">send your comment as a mail</string>
+    <string name="add_sound">add your sound file</string>
+    <string name="splash_image_description">cultural image</string>
+    <string name="comment_sentence">"Your comment for "</string>
+    <string name="home_button_description">"return to the home page"</string>
+
+    <string-array name="language_names" translatable="false">
+        <item>eng:English</item>
+        <item>fra:Français</item><!-- Nom abrégé (utilisé en BDD) : nom complet à afficher-->
+        <!-- <item>cmn:汉语</item>
+         <item>rus:Русский</item>
+         <item>cmn:नेपाली</item>-->
+        <!--<item>pumi:</item>
+
+        <item>yun:</item>-->
+        <item>Nengee:Nengee</item>
+        <item>Kreyol:Kreyol</item>
+        <item>Teko:Teko</item>
+        <item>Kalina:Kalina</item>
+        <item>Gbaya:Gbaya</item>
+    </string-array>
+
+
+    <!--<string name="main_search_title">Search Khaling verbs :</string>-->
+    <!--<string name="main_search_title">Search a word :</string>-->
+    <string name="empty_search_message">"nothing to search"</string>
+    <string name="missing_audio_file_message">" : file not found please contact us"</string>
+    <string name="all_languages_hidden_message">"warning : all languages can't be hidden"</string>
+    <string name="gloss_language_for_word_list_label">"gloss language for word list"</string>
+
+    <string name="feedback_mail" translatable="false">christian.chanard@cnrs.fr</string>
+    <!--string name="feedback_mail" translatable="false">dict.lmf.efl@gmail.com</string-->
+    <!--<string name="feedback_mail" translatable="false">bonnet.remy@gmail.com</string>-->
+    <!--<string name="feedback_mail" translatable="false">michaud.cnrs@gmail.com</string>-->
+    <!--<string name="feedback_mail" translatable="false">benayungur@gmail.com</string>-->
+
+    <string name="audio_files_location" translatable="false">http://lacito.vjf.cnrs.fr/pangloss/dictionaries/japhug/data/audio/wav/</string>
+
+    <!--<string name="regex4phonetic_notes" translatable="false">\\(??\\|f[vxn].*?。</string>-->
+    <string name="regex4phonetic_notes" translatable="false">\\(??\\|f[vxn]\\{(.*?)\\}</string>
+    <string name="editor_name" translatable="false">CNRS - Labex EFL - LLACAN - SEDYL</string>
+    <string name="hidden_search_language">This language has been disabled in the application languages settings.</string>
+    <!--string name="lastEntry">previous entry</string-->
+    <string name="lastEntry" translatable="false">&#x21D0;</string>
+    <string name="nextEntry" translatable="false">&#x21D2;</string>
+    <string name="previousEntry" translatable="false">&#x21D0;</string>
+</resources>

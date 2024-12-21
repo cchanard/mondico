@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--string name="app_name">dictionnaire Nengee</string-->
+    <string name="app_name">dictionnaire Nengee</string>
+    <string name="other_languages_search_title">Rechercher dans une autre langue</string>
+    <!--string name="main_search_title">Chercher un mot Nengee :</string-->
+    <string name="main_search_title">Chercher un mot Nengee :</string>
+    <string name="action_information">informations sur le dictionnaire</string>
+    <string name="add_sound">ajoutez votre fichier son</string>
+    <string name="advanced_search_string">recherche avancée</string>
+    <string name="comment_edit_text_default_string">votre commentaire</string>
+    <string name="contains_string">contient</string>
+    <!--<string name="definition_string">définition</string>
+    <string name="entry_string">Entrée</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="authors_label">auteurs</string>
+    <string name="comments_label">commentaires</string>
+    <string name="publication_date_label">date de publication</string>
+    <string name="name_label">nom</string>
+    -->
+
+    <string name="hello_world">Salut tout le monde !</string>
+    <string name="app_label">monDicodict-univ</string>
+    <string name="search_hint">Rechercher un mot</string>
+
+    <string name="launch_search_string">recherche avancée</string>
+    <string name="action_mail">envoyez-nous un mail</string>
+    <string name="audio_recorder_title">Créer et ajouter un fichier son</string>
+    <string name="send_mail">envoyez votre commentaire dans un mail</string>
+    <string name="search_now_string">rechercher</string>
+    <string name="action_application_information">informations sur l\'application</string>
+    <string name="action_faq">faq</string>
+    <string name="audio_record">enregistrer</string>
+    <string name="audio_play">écouter</string>
+    <string name="audio_stop">stop</string>
+    <string name="action_helpFr">Aide</string>
+    <string name="action_helpEn">Help</string>
+    <string name="action_helpNg">Yeepi</string>
+    <string name="action_info">A propos du dictionnaire Nengee</string>
+    <string name="splash_image_description">"image "</string>
+    <string name="comment_sentence">commentaire pour </string>
+    <string name="message_application_information">Cette application a été développée pour le LLACAN et le SeDyl (unités de recherche du CNRS) par Louise Bouteille (louisebouteille@gmail.com) et Maël Franceschetti (mael.francesc@gmail.com), sur la base du projet japhug_Dictionary initié par Remy Bonnet (remy.bonnet@cnrs.fr) pour le Labex EFL. Il est maintenu par Christian Chanard (christian.chanard@cnrs.fr)</string>
+    <string name="message_dico_information">Ce dictionnaire a été créé dans le cadre du projet \'Dictionnaires de Guyane\' du SeDyl.</string>
+    <string name="user_feedback_message">Aidez-nous à améliorer le dictionnaire</string>
+    <string name="authors"></string>
+    <string name="dict_info_title">Informations sur le Dictionnaire</string>
+
+    <string name="home_button_description">retour à la page d\'accueil</string>
+    <string name="empty_search_message">rien à chercher</string>
+    <string name="all_languages_hidden_message">Attention : toutes les langues ne peuvent pas être masquées</string>
+    <string name="missing_audio_file_message">: fichier non trouvé, contactez-nous svp</string>
+    <string name="gloss_language_for_word_list_label">langues de glose pour les listes de mots</string>
+    <string name="action_languages_settings">paramètres langues </string>
+    <string name="hidden_search_language">Cette langue a été désactivée dans les paramètres de langue de l\'application.</string>
+</resources>
