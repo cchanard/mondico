@@ -750,6 +750,7 @@ class dictData {
                 }
             }
         }
+
         // @TODO un petit test que les donnees sont pas trop pourries et les tableaux de meme taille
         String[][] res_tab = new String[5][words4letter.size()];
         res_tab[0] = new String[words4letter.size()];

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Nengee dictionary</string>
+    <string name="app_name">Dictionnaire Nengee</string>
     <string name="authors">Bonnet/Marchetti/Chanard</string>
-
+    <!--string name="authors">CNRS/Sedyl/Llacan </string-->
     <string name="dict_info_title">Dictionary Information</string>
 
     <string name="hello_world">Hello world!</string>
@@ -21,7 +21,7 @@
     <string name="message_dico_information">This dictionary has been created as part of the project \'Dictionnaires de Guyane\' of SeDyl</string>
     <string name="action_mail">Sende wan email/Envoyer nous un email/Send us a mail / </string>
     <string name="action_faq">faq</string>
-    <string name="action_helpNg">Yeepi</string>
+    <string name="action_helpNg">Yeepi</string>fv
     <string name="action_helpFr">Aide</string>
     <string name="action_helpEn">Help</string>
     <string name="action_info">About the Nengee dictionary</string>

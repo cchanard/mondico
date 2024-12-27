@@ -1,13 +1,15 @@
 package com.infolangues.mondico;
-
-import static android.widget.AdapterView.OnItemSelectedListener;
-
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -20,29 +22,34 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Switch;
-
-import android.widget.TabHost;
+//import android.widget.TabHost;
+import com.google.android.material.tabs.TabLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import android.support.constraint.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import android.widget.AutoCompleteTextView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.Scanner;
 
 //Created by Bonnet, design  rebuilt and additionnal functions by Maël Franceschetti and Louise Bouteilleon 05/2018
 
@@ -64,7 +71,8 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
     LinearLayout layoutBtns;
     private boolean RA_active = false;
     private LinearLayout panelAS;
-    private TabHost host;
+    //private TabHost host;
+    private TabLayout host;
     private SearchView searchView;
 
     private EditText searchView2;
@@ -74,11 +82,12 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
     private ArrayList<String> CATchoisies;
     private ArrayList<CheckBox> CATdispos2;
     private Spinner dropdown;
-    private Switch isAdvancedSearchActive;
+    private SwitchCompat isAdvancedSearchActive;
     ConstraintLayout fenetreRecherche ;
     ConstraintLayout panelLoading;
     private String currentLetter; //lettre en cours
     private static ArrayList<pageLettre> letterViews;
+    private String currentLanguage;
 
     private class pageLettre{
         public String lettre;
@@ -104,7 +113,19 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //progressBar = findViewById(R.id.progressBar);   // CC 021024
+        // Récupérer la version actuelle de l'application
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String currentVersion = packageInfo.versionName;
+            // Appeler la méthode pour vérifier les mises à jour
+            checkForUpdates(currentVersion);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    //progressBar = findViewById(R.id.progressBar);   // CC 021024
         //executorService = Executors.newSingleThreadExecutor();
         //loadDataFromDatabase();
 
@@ -112,12 +133,12 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
 
         fenetreRecherche = findViewById(R.id.fenetreRecherche);//fenetre de la recherche (R. avancée etc...)
 
-        final LinearLayout ongletFR= findViewById(R.id.tab2);//contenu des onglets de langues invisibles avant leur création, pour éviter les superpositions et les bugs.
+        /*final LinearLayout ongletFR= findViewById(R.id.tab2);//contenu des onglets de langues invisibles avant leur création, pour éviter les superpositions et les bugs.
         ongletFR.setVisibility(View.INVISIBLE);//contenu des onglets (rendu invisible pour ne pas se superposer etc...)
         final LinearLayout ongletEN= findViewById(R.id.tab3);
-        ongletEN.setVisibility(View.INVISIBLE);
+        ongletEN.setVisibility(View.INVISIBLE);*/
 
-        panelAS = findViewById(R.id.advancedSearchPanel); //panel recherche avancée masqué au départ
+        /*panelAS = findViewById(R.id.advancedSearchPanel); //panel recherche avancée masqué au départ
         panelAS.setVisibility(View.GONE);
         isAdvancedSearchActive = findViewById(R.id.isAdvancedSearchActive);
         isAdvancedSearchActive.setOnCheckedChangeListener((buttonView, isChecked) -> setActiveAS(isChecked));
@@ -147,14 +168,16 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             }
             else{
                 panelAS.setVisibility(View.GONE);
-                arrowRA.setRotation(arrowRA.getRotation()+180.f);
-            }
+                arrowRA.setRotation(arrowRA.getRotation()+180.f);}
         });
-
+*/
         /* INITIALISATION ONGLETS */
         //on initialise le TabHost qui accueillera les onglets des langues
-        host = findViewById(R.id.tabHost);
-        host.setup();
+        /* host = findViewById(R.id.tabHost);
+        host.setup();*/
+        // remplacé par tabLayout
+        //host = findViewById(R.id.tabHost);
+
         /* FIN INITIALISATION ONGLETS */
 
         //on masque tout car ce sera ouvert à l'activation de la SearchView du menu :
@@ -164,9 +187,9 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
 
         /*   GRILLE LETTRES COMPLEMENTAIRES */
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-        complement_letter_grid = findViewById(R.id.complement_letter_grid);
+        //complement_letter_grid = findViewById(R.id.complement_letter_grid);
         //}
-        final ArrayList<String> complement_letter_list = dictData.getComplementLetters();
+/*       final ArrayList<String> complement_letter_list = dictData.getComplementLetters();
         complement_letter_list.remove("");
         complement_letter_list.remove(" ");
         complement_letter_list.remove("(");
@@ -232,15 +255,15 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         }
 
         complement_letter_grid.setVisibility(View.VISIBLE);
-        LinearLayout complement_letter = findViewById(R.id.ll1);  // CC 200915 : zone cachée pour le Neenge
-        complement_letter.setVisibility(LinearLayout.GONE);
-
+        //LinearLayout complement_letter = findViewById(R.id.ll1);  // CC 200915 : zone cachée pour le Neenge
+        //complement_letter.setVisibility(LinearLayout.GONE);
+*/
         final String[] letter_list;
-        if (dictData.alphabets_list.size() == 0 || dictData.ascii_devanagari_correspondence.size() == 0) {
-            letter_list = dictData.getLocalLetters();
-        } else {
+        //if (dictData.alphabets_list.size() == 0  || dictData.ascii_devanagari_correspondence.size()  == 0) {
+        letter_list = dictData.getLocalLetters();
+        /*} else {
             letter_list = dictData.getLocalLetterList();
-        }
+        }*/
         int currentID = 732; // magic constant
         //Resources res = getResources();
 
@@ -252,18 +275,23 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         String abrevNomLocale = dictData.languages_list.get(0); //on récupère l'abréviation de la langue en BDD
         Resources resources=getResources();
         String[] languagesCorrespondance = resources.getStringArray(R.array.language_names);
-        for(int i=0;i<languagesCorrespondance.length;i++){ //on récupère le nom complet de la langue
-            String[] corresp = languagesCorrespondance[i].split(":");
-            if(corresp[0].equals(abrevNomLocale)){
+        for (String s : languagesCorrespondance) { //on récupère le nom complet de la langue
+            String[] corresp = s.split(":");
+            if (corresp[0].equals(abrevNomLocale)) {
                 nomLocale = corresp[1];
-                System.err.println("*********** LANGUE LOCALE : "+corresp[1]);
+                System.err.println("*********** LANGUE LOCALE : " + corresp[1]);
                 break;
             }
         }
-        TabHost.TabSpec spec = host.newTabSpec(nomLocale);//on créé l'onglet avec le nom complet de la langue locale
+        /* TabHost.TabSpec spec = host.newTabSpec(nomLocale);//on créé l'onglet avec le nom complet de la langue locale
         spec.setContent(R.id.tab1);
         spec.setIndicator(nomLocale);
-        host.addTab(spec);
+        host.addTab(spec); */
+/*
+        TabLayout.Tab tab = host.newTab();
+        tab.setText(nomLocale);
+        //tab.setIcon(R.drawable.icon_Nengee);  // Définir une icône
+        //host.addTab(tab);
 
         final List<String> other_languages_list = dictData.languages_list.subList(1, dictData.languages_list.size());
         MyApplication.Log("other_languages_list : " + Arrays.toString(other_languages_list.toArray()));
@@ -298,52 +326,58 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             //on place les vues crées dans le bon onglet :
             LinearLayout fr = findViewById(R.id.other_languages);
             LinearLayout en = findViewById(R.id.other_languages_EN);
-            spec = host.newTabSpec(nomLangue);
+            //spec = host.newTabSpec(nomLangue);
+            TabLayout.Tab tabx = host.newTab();
+            tabx.setText(nomLangue);
             if(nomLangue.equals("Français")){
-                ongletFR.setVisibility(View.VISIBLE);
+                //ongletFR.setVisibility(View.VISIBLE);
                 fr.addView(ll[lgg_cpt]);
-                spec.setContent(R.id.tab2);
+                //spec.setContent(R.id.tab2);
             }else if(nomLangue.equals("English")){
-                ongletEN.setVisibility(View.VISIBLE);
+                //ongletEN.setVisibility(View.VISIBLE);
                 en.addView(ll[lgg_cpt]);
-                spec.setContent(R.id.tab3);
+                //spec.setContent(R.id.tab3);
             }
             else {
                 en.addView(ll[lgg_cpt]);
-                spec.setContent(R.id.tab3);
+                //spec.setContent(R.id.tab3);
             }
-            spec.setIndicator(nomLangue);
+            /*spec.setIndicator(nomLangue);
             host.addTab(spec);
+            //tab.setText(nomLangue);
+            //host.addTab(tabx);
         }
-
+*/
         /*  ON INITIALISE LA COULEUR DES ONGLETS QUAND ACTIFS*/
+/*
         initialiserCouleurOnglets(host,language_names.length, Color.WHITE);//on met la couleur de fond sur tous les onglets de choix de langue
         String colorchoiceNG =  "#caf2df";
-        if(colorchoiceNG==null){
+        /*if(colorchoiceNG == null){
             colorchoiceNG = "#000000";//noir si non défini
         }
-        if(host.getTabWidget().getChildAt(0)!=null) { //si le premier onglet est le n°1
-            host.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor(colorchoiceNG));//on place le marqueur sur le 1er onglet (qui est celui actif par défaut)
+        if(host.getTabAt(0) != null) { //si le premier onglet est le n°1
+            host.getTabAt(0).view.setBackgroundColor(Color.parseColor(colorchoiceNG));//on place le marqueur sur le 1er onglet (qui est celui actif par défaut)
         }
         else{//si ce n'est pas le n°1 le premier, on récupère celui actuellement actif
-            int idCurrent = host.getCurrentTab();//l'indice de l'onglet courant
-            host.getTabWidget().getChildAt(idCurrent).setBackgroundColor(Color.parseColor(colorchoiceNG));//on place le marqueur sur le 1er onglet (qui est celui actif par défaut)
+            int idCurrent = getCurrentTab().getPosition();//l'indice de l'onglet courant
+            host.getTabAt(idCurrent).view.setBackgroundColor(Color.parseColor(colorchoiceNG));//on place le marqueur sur le 1er onglet (qui est celui actif par défaut)
         }
-
+*/
         /*  MAJ SPINNER RECHERCHE AVANCEE SELON LANGUE */
-        host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+/*
+        host.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabChanged(String tabId) {
-                String langue =  host.getCurrentTabTag();
-                int idCurrent = host.getCurrentTab();//l'indice de l'onglet courrant
-                initialiserCouleurOnglets(host,language_names.length, Color.WHITE);//on réinitialise al couleur des onglets
+            public void onTabSelected(TabLayout.Tab tab) {
+                currentTab = tab;
+                int idCurrent = host.getSelectedTabPosition();
+                initialiserCouleurOnglets(host,language_names.length, Color.WHITE);
                 Resources res = getResources();
-                String colorchoiceNG =  res.getString(R.string.localDelayColor_Theme);
+                String colorchoiceNG = res.getString(R.string.localDelayColor_Theme);
                 String colorchoiceFR = res.getString(R.string.frenchDelayColor_Theme); //colorFR adoucie;
                 String colorchoiceEN = res.getString(R.string.englishDelayColor_Theme); //colorEN adoucie;
                 String finalColor = idCurrent==0?colorchoiceNG:(idCurrent==1?colorchoiceFR:(idCurrent==2?colorchoiceEN:"BLACK"));
-                host.getTabWidget().getChildAt(idCurrent).setBackgroundColor(Color.parseColor(finalColor));
-
+                host.getTabAt(idCurrent).view.setBackgroundColor(Color.parseColor(finalColor));
+                String langue = (String) tab.getText();  // Récupérer le tag (ici, le nom de la langue)
                 upDateSpinner(langue);//on met à jour les choix du spinner en fonction de la langue choisie.
                 if(langue.equals("fra")||langue.equals("eng")||langue.equals("Français")||langue.equals("English")){
                     final MenuItem searchItem = menuM.findItem(R.id.action_search);
@@ -364,6 +398,29 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                     searchAutoComplete.setAdapter(adapterS);
                 }
             }
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+*/
+        // Prise en compte de la langue de recherche choisi. Désactive l'autocomplete pour l'anglais et le français
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton selectedRadioButton = findViewById(checkedId);
+                String currentLanguage = selectedRadioButton.getText().toString();
+                if(currentLanguage.equals("fra")||currentLanguage.equals("eng")||currentLanguage.equals("Français")||currentLanguage.equals("English")){
+                    final MenuItem searchItem = menuM.findItem(R.id.action_search);
+                    searchView =  (SearchView) searchItem.getActionView();  // CC 200919
+                    AutoCompleteTextView searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+                    ArrayAdapter<String> adapter = null;
+                    searchAutoComplete.setAdapter(adapter);
+                }
+                System.out.println("**********"+currentLanguage);
+            }
         });
 
         /*   CAROUSSEL BTNS LETTRES  */
@@ -373,7 +430,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         for (int i = 0; i < letter_list.length; i++) {
             final String chosen_letter = letter_list[i];
             // @TODO use a non hardcoded list
-            if (!chosen_letter.equals("") && !chosen_letter.equals(" ") &&
+            if (!chosen_letter.isEmpty() && !chosen_letter.equals(" ") &&
                     !chosen_letter.equals("(") && !chosen_letter.equals(")") &&
                     !chosen_letter.equals("-") && !chosen_letter.equals("_")) {
                 btn[i] = new Button(this);
@@ -408,19 +465,19 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
 
         /*  RECHERCHE AVANCEE: */
 
-        upDateSpinner("initialiser");//on initialise le Spinner en passant dans le "default case" du Switch
+        //upDateSpinner("initialiser");//on initialise le Spinner en passant dans le "default case" du Switch
 
         /* CHECKBOX 'contains' */
-        as_cb = findViewById(R.id.contains_or_isCheckBox);
+        /*as_cb = findViewById(R.id.contains_or_isCheckBox);
         as_cb.setChecked(true);
         as_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setActiveAS(true);
             }
-        });
+        });*/
         /* CATEGORIES GRAMMATICALES */
-        CATdispos2 = new ArrayList<CheckBox>();//liste qui contiendra les cat gramm dispos
+        /*CATdispos2 = new ArrayList<CheckBox>();//liste qui contiendra les cat gramm dispos
         LinearLayout checkBoxesPanel = findViewById(R.id.CheckBoxesCat); //Vue contenant les checkBoxes de Cat gramm
         ArrayList<String> catExistantesBDD = dictData.getPartOfSpeechChoices();//on récupère la liste des cat existantes en BDD
         for(int i = 0; i < catExistantesBDD.size();i++){
@@ -434,12 +491,12 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             chCat.setText(catExistantesBDD.get(i));//on l'associe à une cat gramm de la bdd
             CATdispos2.add(chCat);// on l'ajoute à la liste des checkboxes de cat dispos (pour ensuite pouvoir vérifier lesquelles sont checked)
             checkBoxesPanel.addView(chCat); // on l'ajoute à la vue du pannel des checkboxes (dans la recherche avancée)
-        }
+        }*/
         CATchoisies = new ArrayList<>();//liste des cat checkées par l'utilisateur (final, elle sera actualisée à chaque clique du bouton Rech avancée)
         /* FIN CATEGORIES GRAMMATICALES */
 
         /* THESAURUS */
-        THdispos = new ArrayList<>();//liste qui contiendra les  thesaurus dispos
+        /*THdispos = new ArrayList<>();//liste qui contiendra les  thesaurus dispos
         LinearLayout thesaurusPanel = findViewById(R.id.CheckBoxesTh); //Vue contenant les checkBoxes de Thesaurus
         ArrayList<String> thExistantsBDD = dictData.getThesaurusChoices();//on récupère la liste des thesaurus existantes en BDD
         for(int i = 0; i < thExistantsBDD.size();i++){
@@ -453,12 +510,12 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             chTh.setText(thExistantsBDD.get(i));//on l'associe à un thesaurus de la bdd
             THdispos.add(chTh);// on l'ajoute à la liste des checkboxes de th dispos (pour ensuite pouvoir vérifier lesquelles sont checked)
             thesaurusPanel.addView(chTh); // on l'ajoute à la vue du pannel des thesaurus (dans la recherche avancée)
-        }
+        }*/
         THchoisis = new ArrayList<>();//liste des th checkées par l'utilisateur (final, elle sera actualisée à chaque clique du bouton Rech avancée)
         /* FIN THESAURUS */
 
         /* BTN CLEAR : */
-        Button clear_adv_search = findViewById(R.id.clear_adv_search);
+        /*Button clear_adv_search = findViewById(R.id.clear_adv_search);
         clear_adv_search.setOnClickListener(v -> {
             as_cb.setChecked(true);//on check la checkbox "contains"
             dropdown.setSelection(0);//on place la sélection du spinner sur le 1er élément ("définition")
@@ -469,17 +526,33 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                 THdispos.get(i).setChecked(false);//on dé-check les checkboxes des Thésaurus
             }
             setActiveAS(false);
-        });              /* FIN BTN CLEAR */
+        });  */            /* FIN BTN CLEAR */
 
         /* ON MASQUE LE CONTENU DES ONGLETS VIDES (FR et EN) : */
         //fr:
-        findViewById(R.id.tab2).setBackgroundColor(Color.TRANSPARENT);
-        findViewById(R.id.tab2).setVisibility(View.GONE);
-        findViewById(R.id.other_languages_and_letter_grid).setVisibility(View.GONE);
+        //findViewById(R.id.tab2).setBackgroundColor(Color.TRANSPARENT);
+        //findViewById(R.id.tab2).setVisibility(View.GONE);
+        //findViewById(R.id.other_languages_and_letter_grid).setVisibility(View.GONE);
         //en:
-        findViewById(R.id.tab3).setBackgroundColor(Color.TRANSPARENT);
-        findViewById(R.id.tab3).setVisibility(View.GONE);
-        findViewById(R.id.other_languages_and_letter_grid_EN).setVisibility(View.GONE);
+        //findViewById(R.id.tab3).setBackgroundColor(Color.TRANSPARENT);
+        //findViewById(R.id.tab3).setVisibility(View.GONE);
+        //findViewById(R.id.other_languages_and_letter_grid_EN).setVisibility(View.GONE);
+    }
+
+    public String getSelectedRadioButton() {
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        int selectedId = radioGroup.getCheckedRadioButtonId(); // Récupérer l'ID du RadioButton sélectionné
+        if (selectedId != -1) {
+            RadioButton selectedRadioButton = findViewById(selectedId);
+            String selectedText = selectedRadioButton.getText().toString();
+            Toast.makeText(this, "RadioButton sélectionné : " + selectedText, Toast.LENGTH_SHORT).show();
+            return(selectedText);
+        }
+        return "";
+    }
+
+    public String getCurrentLanguage() {
+        return currentLanguage;
     }
 
     private static ArrayList<String> deleteDuplicateString(ArrayList<String> al) {//supprime les doublons
@@ -598,7 +671,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             int actualOptions = searchView.getImeOptions();
         }
         //System.out.println("actionIdTeko="+ actualOptions);
-        //Toast.makeText(MainActivity.this,"Search="+searchView.getImeOptions(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity_new.this,"Search="+searchView.getImeOptions(),Toast.LENGTH_SHORT).show();
         if (searchView != null) {
             searchView.setQueryHint(getString(R.string.search_hint));        // CC
         }
@@ -607,7 +680,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         AutoCompleteTextView searchAutoComplete = null;
         if (searchView != null) {
             searchAutoComplete = searchView.findViewById(androidx
-                            .appcompat.R.id.search_src_text);
+                    .appcompat.R.id.search_src_text);
         }
         if (searchAutoComplete != null) {
             searchAutoComplete.setDropDownBackgroundResource(android.R.color.white);
@@ -630,8 +703,6 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         ArrayList<String> variantes;
         variantes = dictData.getVariantes();
         propositions.addAll(deleteDuplicateString(variantes));
-
-        Collections.sort(propositions);
         if (MyApplication.word_duplication_without_prefix){
             ArrayList<String> artificial_propositions = new ArrayList<>();
             for (String proposition : propositions){
@@ -641,12 +712,14 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             }
             propositions.addAll(artificial_propositions);
         }
+        Collections.sort(propositions);
         adapter = new ArrayAdapter<>(this, R.layout.list_item, propositions);
         // Set the adapter for the AutoCompleteTextView
         adapterS = adapter;
         if (searchAutoComplete != null) {
             searchAutoComplete.setAdapter(adapter);
         }
+
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // Display a Toast Message when the user clicks on an item in the AutoCompleteTextView
             @Override
@@ -710,18 +783,18 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                     System.err.println("**************** search launched");
                     Resources resources=getResources();//on récupère toutes les ressources (du fichier String.xml, dans le répertoire 'values")
                     String[] languagesCorrespondance = resources.getStringArray(R.array.language_names); //on récupère la tableau contenant les associations langue/abréviation
-                    System.err.println("*********** lang : "+host.getCurrentTabTag());
                     String chosenLanguage="";
                     boolean advancedSearchActive = RA_active;//on récupère la valeur de l'activité de la recherche avancée (true = active, false= inactive. Valeur mise à jour quand un champ de la R.A est modifié).
                     System.err.println("advancedSearchActive : "+advancedSearchActive);
                     String search_string = query;//on récupère la chaîne saisie dans le SearchView (passée automatiquement en paramètre à cette méthode)
-                    String tabLanguage = host.getCurrentTabTag();//On récupère le nom de l'onglet qui a le focus (le nom = la langue, exemple : "Français", "Gbaya")
-                    for(int i=0;i<languagesCorrespondance.length;i++){//on cherche l'abréviation qui correspond à la langue de la recherche(exemple : 'fra' pour 'Français')
-                        String[] corresp = languagesCorrespondance[i].split(":");
-                        System.err.println("*********** ressources split : "+corresp[0]+" - "+corresp[1]);
-                        if(corresp[1].equals(tabLanguage)){
+                    //String tabLanguage = getCurrentLanguage();//On récupère le nom de l'onglet qui a le focus (le nom = la langue, exemple : "Français", "Gbaya")
+                    String tabLanguage = getSelectedRadioButton();
+                    for (String s : languagesCorrespondance) {//on cherche l'abréviation qui correspond à la langue de la recherche(exemple : 'fra' pour 'Français')
+                        String[] corresp = s.split(":");
+                        System.err.println("*********** ressources split : " + corresp[0] + " - " + corresp[1]);
+                        if (corresp[1].equals(tabLanguage)) {
                             chosenLanguage = corresp[0];
-                            System.err.println("*********** VOULU : "+corresp[0]+" - "+corresp[1]);
+                            System.err.println("*********** VOULU : " + corresp[0] + " - " + corresp[1]);
                             break;
                         }
                     }
@@ -753,7 +826,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                             }
                         }
                     }
-                    if (search_string.length()==0) {//si rien n'a été tappé on affiche un Toast et on quitte
+                    if (search_string.isEmpty()) {//si rien n'a été tappé on affiche un Toast et on quitte
                         Context context = getApplicationContext();
                         Toast msg = Toast.makeText(context, context.getString(R.string.empty_search_message), Toast.LENGTH_LONG);
                         msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2, msg.getYOffset() / 2);
@@ -775,8 +848,9 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                     }
                     //on passe des extras (des variables) contenant les paramètres de la recherche choisis :
                     intent.putExtra(MyApplication.SEARCHED_STRING, search_string);//on passe la chaîne de caractères recherchée
-                    intent.putExtra(MyApplication.CHECKBOX_STATE, as_cb.isChecked() + "");//on passe le "Containt" de la checkbox
-                    intent.putExtra(MyApplication.CHOSEN_LANGUAGE, chosenLanguage); //on passe la langue choisi (léabréviation, pour pouvoir comparer en BDD avec les chamsp "lang")
+                    //intent.putExtra(MyApplication.CHECKBOX_STATE, as_cb.isChecked() + "");//on passe le "Constaint" de la checkbox
+                    intent.putExtra(MyApplication.CHECKBOX_STATE, false + "");//on passe le "Constaint" de la checkbox
+                    intent.putExtra(MyApplication.CHOSEN_LANGUAGE, chosenLanguage); //on passe la langue choisi (l'abréviation, pour pouvoir comparer en BDD avec les chamsp "lang")
                     intent.putExtra("chosenCAT", CATchoisies);//on passe les catégories grammaticales choisies
                     intent.putExtra("chosenTH", THchoisis);//on passe les domaine choisis
                     startActivity(intent);//On démarre l'activité de recherche avec l'intent créé précedemment
@@ -792,25 +866,32 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             });
         }
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                fermerPanneauRecherche();
-                fermerPanneauRecherche();
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {//quand on met le focus sur le champ de recherche
-                if(hasFocus){
-                    ouvrirPanneauRecherche();
+        if (searchView != null) {
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    fermerPanneauRecherche();
+                    fermerPanneauRecherche();
+                    return false;
                 }
-            }
-        });
+            });
+        }
+
+        if (searchView != null) {
+            searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {//quand on met le focus sur le champ de recherche
+                    if(hasFocus){
+                        ouvrirPanneauRecherche();
+                    }
+                }
+            });
+        }
         return true;
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {//gère le choix d'une option dans le menu
@@ -901,20 +982,19 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         }
     }
 
-    /*
-     * @function affiche le progressBar de chargement
+    /**
+     * function affiche le progressBar de chargement
      */
     public void afficherLoading(){
         panelLoading.setVisibility(View.VISIBLE);
         panelLoading.setZ(1000);
-
         LinearLayout firstPage = findViewById(R.id.firstPage);
         firstPage.setBackgroundColor(Color.DKGRAY);
     }
 
 
-    /*
-     * @function affiche le pannel de recherche et le pannel de recherche avancée
+    /**
+     * function affiche le pannel de recherche et le pannel de recherche avancée
      */
     public synchronized void ouvrirPanneauRecherche(){
         fenetreRecherche.setVisibility(View.VISIBLE);
@@ -928,8 +1008,8 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         scrollDico.setScrollable(false);
     }
 
-    /*
-     * @function masque le pannel de recherche et le pannel de recherche avancée
+    /**
+     * function masque le pannel de recherche et le pannel de recherche avancée
      */
     public synchronized void fermerPanneauRecherche(){
         fenetreRecherche.clearFocus();
@@ -966,8 +1046,8 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         }
     }
 
-    /*
-     * @function charge dans la page principale les entrées commençant par la lettre voulue par tranche de 'nbEntreesParPage'
+    /**
+     * function charge dans la page principale les entrées commençant par la lettre voulue par tranche de 'nbEntreesParPage'
      *  Garde en mémoire les pages déjà créées pour gagner du temps lorsqu'on y retourne ou qu'on charge les entrées suivantes
      */
     public void getFirstPage(String letter){ //temps moyen d'éxécution : 262,2ms
@@ -995,7 +1075,22 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         //TitreLettre.setTypeface(custom_font);
         LinearLayout firstPage = findViewById(R.id.firstPage);//la vue qui contiendra les entrées affichées
         //firstPage.removeAllViews();//on vide les résultats précédents
-        int back_color = firstPage.getDrawingCacheBackgroundColor();
+        Drawable background = firstPage.getBackground();
+
+        if (background != null && background instanceof ColorDrawable) {
+            ColorDrawable colorDrawable = (ColorDrawable) background;
+            int color = colorDrawable.getColor();
+            // Utilisez la couleur comme nécessaire
+        } else {
+            // Le fond est soit null, soit un autre type de Drawable, gérez ce cas
+        }
+        if (background != null && background instanceof ColorDrawable) {
+            ColorDrawable colorDrawable = (ColorDrawable) background;
+            int color = colorDrawable.getColor();
+            // Utilisez la couleur comme nécessaire
+        } else {
+            // Le fond est soit null, soit un autre type de Drawable, gérez ce cas
+        }
         String[][] world_list;
         String[][] lex_id_list = dictData.getLexemeAndIDList(letter);
         if(lex_id_list.length == 0) {
@@ -1040,7 +1135,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
             btn[i].setTypeface(custom_font);
 
             btn[i].setTextSize(tailleEntrees);//taille police
-            btn[i].setBackgroundColor(back_color);
+            //btn[i].setBackgroundColor(back_color);
             btn[i].setTransformationMethod(null);
             btn[i].setGravity(Gravity.START);
             btn[i].setIncludeFontPadding(false);
@@ -1094,9 +1189,10 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         currentLetter = letter;//on actualise la lettre en cours de consultation
     }
 
-    public void upDateSpinner(String lang){
+    // recherche dans entrée (nengee) ou dans définition (français, anglais)
+    /*public void upDateSpinner(String lang){
         dropdown = findViewById(R.id.search_type_spinner);
-        dropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0) {
@@ -1109,8 +1205,8 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
                 setActiveAS(false);
             }
         });
-        String[] items;
 
+        String[] items;
         if(lang.equals("Français")||lang.equals("English")){//les choix de champs contenant les langues FR et EN, dans lesquels on peut chercher dans ces langues
             items = new String[]{"definition", "example"};
         }
@@ -1119,7 +1215,7 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter2);
-    }
+    }*/
 
     public String getColorEntrees(){
         return color;
@@ -1203,18 +1299,81 @@ public class MainActivity extends AppCompatActivity /*ActionBarActivity*/ {
         letterViews = new ArrayList<pageLettre>();//initialisation de la liste des pages des lettres déjà chargées
     }
 
-    private void initialiserCouleurOnglets(TabHost host, int number, int color){
+    private void initialiserCouleurOnglets(TabLayout host, int number, int color){
         for(int w = 0; w < number; w++){
-            if(host.getTabWidget().getChildAt(w)!=null) {
-                host.getTabWidget().getChildAt(w).setBackgroundColor(color);
-                host.getTabWidget().getChildTabViewAt(w).setBackgroundColor(color);
-                TextView titleTab = host.getTabWidget().getChildAt(w).findViewById(android.R.id.title);//on colorie l'onglet courrant (celui sélectionné)
-                titleTab.setTextColor(Color.BLACK);
+            if(host.getTabCount() != 0) {
+                host.getTabAt(w).view.setBackgroundColor(color);
+                TextView tabText = (TextView) host.getTabAt(w).view.findViewById(android.R.id.title);
+                tabText.setTextColor(Color.BLACK);
             }
         }
     }
 
-    public void onBackPressed() {
-        getOnBackPressedDispatcher().onBackPressed();
+    public void checkForUpdates(String currentVersion) {
+        String urlString = "https://corporan.huma-num.fr/Lexiques/TMP/NengeeVersion.txt"; // URL du fichier texte
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Crée une connexion HTTP pour récupérer le fichier texte
+                    URL url = new URL(urlString);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                    String result = convertStreamToString(inputStream);
+                    urlConnection.disconnect();
+
+                    // Compare la version actuelle de l'application avec la version la plus récente
+                    compareVersions(result);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
+
+    private String convertStreamToString(InputStream is) {
+        Scanner scanner = new Scanner(is).useDelimiter("\\A");
+        return scanner.hasNext() ? scanner.next() : "";
+    }
+
+    private void compareVersions(String latestVersion) {
+        try {
+            // la version actuelle de l'application
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String currentVersion = packageInfo.versionName;
+
+            // Comparer les versions
+            if (!currentVersion.equals(latestVersion)) {
+                // L'application doit être mise à jour
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Affichez un message ou proposez une mise à jour
+                        Toast.makeText(getApplicationContext(), "version actuelle : " + currentVersion + " Une nouvelle mise à jour est disponible", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showUpdateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mise à jour disponible")
+                .setMessage("Une nouvelle version de l'application est disponible. Voulez-vous la mettre à jour ?")
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Lien vers le Play Store pour mettre à jour l'application
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Non", null)
+                .show();
+    }
+
+
 }

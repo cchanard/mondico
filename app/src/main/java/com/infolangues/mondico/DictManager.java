@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -401,6 +402,10 @@ class DictManager {
                 this.next = nx;  // CC
                 this.prev = pr;  // CC
             }
+
+            public String getWord() {
+                return lex;
+            }
         }
         Cursor c = this.getLex_id_cf_gloss();
         ArrayList<Lex_id_cf_gloss> res_array = new ArrayList<>();
@@ -456,7 +461,13 @@ class DictManager {
              c.close();
         }
         res_array.add(new Lex_id_cf_gloss(Word, Id, Cf, Fr, En, Pos, Prev, Id));  // CC 220523 dernier item n'était pas traité
-
+        // CC 241226 tri par rapport au mot pour la liste des mots commençant par une lettre
+        Collections.sort(res_array, new Comparator<Lex_id_cf_gloss>() {
+            @Override
+            public int compare(Lex_id_cf_gloss o1, Lex_id_cf_gloss o2) {
+                return o1.getWord().compareTo(o2.getWord()); // Comparaison basée sur le champ 'Word'
+            }
+        });
         String[][] res_tab = new String[8][res_array.size()];       // CC
         int tab_iterator = 0;
         for (Lex_id_cf_gloss line : res_array)
@@ -471,11 +482,10 @@ class DictManager {
             res_tab[7][tab_iterator] = line.next;
             tab_iterator++;
         }
+
       //  System.err.println(" ------ getLex_id_cf_glossTab3 execution time : " + (System.currentTimeMillis() - debut));
         return res_tab;
     }
-
-
     @SuppressLint("Range")
     public Map<String,String> getCorrespondenceTab(){
         Map<String,String> ascii_devanagari_list = new LinkedHashMap<>();
@@ -814,6 +824,7 @@ class DictManager {
             while (c.moveToNext());
             c.close();
         }
+        Collections.sort(result);  // CC 241226
         return result;
     }
 
